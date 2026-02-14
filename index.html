@@ -343,30 +343,6 @@
             line-height: 1.4;
         }
 
-        /* Убираем наклоны на мобильных для лучшего восприятия */
-        .photo-card:nth-child(odd) .photo-front,
-        .photo-card:nth-child(odd) .photo-back {
-            transform: rotate(0deg);
-        }
-
-        .photo-card:nth-child(even) .photo-front,
-        .photo-card:nth-child(even) .photo-back {
-            transform: rotate(0deg);
-        }
-
-        /* Добавляем легкий наклон только для планшетов и выше */
-        @media (min-width: 768px) {
-            .photo-card:nth-child(odd) .photo-front,
-            .photo-card:nth-child(odd) .photo-back {
-                transform: rotate(-0.8deg);
-            }
-
-            .photo-card:nth-child(even) .photo-front,
-            .photo-card:nth-child(even) .photo-back {
-                transform: rotate(1deg);
-            }
-        }
-
         .photo-frame {
             width: 100%;
             aspect-ratio: 4/3;
@@ -402,15 +378,6 @@
             margin-right: auto;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
             border: 1px solid #ffb6b6;
-        }
-
-        .emoji-photo {
-            font-size: clamp(3.5rem, 15vw, 5rem);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            background: linear-gradient(45deg, #ffc0cb, #ffb6c1);
         }
 
         /* Кнопка перехода */
@@ -527,68 +494,76 @@
 
     <script>
         (function() {
-            // Аудио контекст
-            let audioContext;
-            let isPlaying = false;
+            // ===== ВАШИ ДАННЫЕ =====
+            // СЮДА ВСТАВЛЯЙТЕ СВОИ ФОТО, ТЕКСТЫ И ССЫЛКУ
+            
+            // 1. ФОТОГРАФИИ И НАДПИСИ (измените на свои)
+            const photos = [
+                { 
+                    image: 'images/photo1.jpg',  // ПУТЬ К ФОТО 1
+                    caption: 'Наша встреча',      // ПОДПИСЬ
+                    message: 'Самый лучший день в моей жизни ❤️' // ТЕКСТ НА ОБОРОТЕ
+                },
+                { 
+                    image: 'images/photo2.jpg', 
+                    caption: 'Первый поцелуй', 
+                    message: 'Твои губы как лепестки роз 🌹' 
+                },
+                { 
+                    image: 'images/photo3.jpg', 
+                    caption: 'Прогулка', 
+                    message: 'С тобой хоть на край света ✨' 
+                },
+                { 
+                    image: 'images/photo4.jpg', 
+                    caption: 'Закат', 
+                    message: 'Люблю тебя до луны и обратно 🌙' 
+                },
+                { 
+                    image: 'images/photo5.jpg', 
+                    caption: 'Сладкий вечер', 
+                    message: 'Ты лучше любого десерта 🍰' 
+                },
+                { 
+                    image: 'images/photo6.jpg', 
+                    caption: 'Сюрприз', 
+                    message: 'Ты — лучший подарок судьбы 🎁' 
+                },
+                { 
+                    image: 'images/photo7.jpg', 
+                    caption: 'Утро вдвоём', 
+                    message: 'Просыпаться с тобой — счастье ☀️' 
+                },
+                { 
+                    image: 'images/photo8.jpg', 
+                    caption: 'Навсегда', 
+                    message: 'Я люблю тебя бесконечно 💕' 
+                }
+            ];
 
-            // Элементы пластинки
+            // 2. ССЫЛКА ДЛЯ КНОПКИ (вставьте свою)
+            const YOUR_LINK = "https://example.com"; // <--- ЗАМЕНИТЕ НА СВОЮ ССЫЛКУ
+
+            // 3. МУЗЫКА (путь к вашему mp3 файлу)
+            const MUSIC_FILE = "music/song.mp3"; // <--- ПУТЬ К ВАШЕЙ МУЗЫКЕ
+
+            // ===== КОНЕЦ ВАШИХ ДАННЫХ =====
+            // ДАЛЬШЕ НИЧЕГО МЕНЯТЬ НЕ НУЖНО
+            
+            // Элементы
             const record = document.getElementById('record');
             const tonearm = document.getElementById('tonearm');
             const recordContainer = document.getElementById('recordContainer');
             const musicStatus = document.getElementById('musicStatus');
             const recordLabel = document.getElementById('recordLabel');
+            const redirectLink = document.getElementById('redirectLink');
+            
+            // Устанавливаем ссылку
+            redirectLink.href = YOUR_LINK;
 
-            // Данные для фотоальбома - ИЗМЕНИТЕ ТЕКСТ ЗДЕСЬ!
-            const photos = [
-                { 
-                    emoji: '🥰', 
-                    caption: 'Наша встреча', 
-                    bg: '#ffdbdb',
-                    message: 'Самый лучший день в моей жизни ❤️' 
-                },
-                { 
-                    emoji: '😘', 
-                    caption: 'Первый поцелуй', 
-                    bg: '#ffd0d0',
-                    message: 'Твои губы как лепестки роз' 
-                },
-                { 
-                    emoji: '❤️', 
-                    caption: 'Ты и я', 
-                    bg: '#ffc4c4',
-                    message: 'Мы созданы друг для друга' 
-                },
-                { 
-                    emoji: '🌹', 
-                    caption: 'Цветы для тебя', 
-                    bg: '#ffb8b8',
-                    message: 'Ты прекраснее любого цветка' 
-                },
-                { 
-                    emoji: '🍰', 
-                    caption: 'Сладкий вечер', 
-                    bg: '#ffadad',
-                    message: 'С тобой каждый миг сладок' 
-                },
-                { 
-                    emoji: '🎁', 
-                    caption: 'Сюрприз', 
-                    bg: '#ffa2a2',
-                    message: 'Ты — лучший подарок судьбы' 
-                },
-                { 
-                    emoji: '☕', 
-                    caption: 'Утро вдвоём', 
-                    bg: '#ff9696',
-                    message: 'Просыпаться с тобой — счастье' 
-                },
-                { 
-                    emoji: '💑', 
-                    caption: 'Навсегда', 
-                    bg: '#ff8b8b',
-                    message: 'Я люблю тебя бесконечно ✨' 
-                }
-            ];
+            // Аудио элемент
+            let audioElement = null;
+            let isPlaying = false;
 
             // Заполняем фотоальбом
             const albumContainer = document.getElementById('photoAlbum');
@@ -601,7 +576,7 @@
                     <div class="photo-card-inner">
                         <div class="photo-front">
                             <div class="photo-frame">
-                                <div class="emoji-photo" style="background: ${photo.bg};">${photo.emoji}</div>
+                                <img src="${photo.image}" alt="${photo.caption}" loading="lazy">
                             </div>
                             <div class="photo-caption">${photo.caption}</div>
                         </div>
@@ -617,7 +592,7 @@
                     e.stopPropagation();
                     this.classList.toggle('flipped');
                     
-                    // Легкая виброотдача на мобильных (если поддерживается)
+                    // Виброотклик на мобильных
                     if (window.navigator && window.navigator.vibrate) {
                         window.navigator.vibrate(15);
                     }
@@ -626,121 +601,60 @@
                 albumContainer.appendChild(card);
             });
 
-            // Кнопка перехода - ВСТАВЬТЕ СВОЮ ССЫЛКУ ЗДЕСЬ
-            const redirectLink = document.getElementById('redirectLink');
-            // ЗАМЕНИТЕ "#" НА НУЖНЫЙ URL, НАПРИМЕР:
-            redirectLink.href = "https://www.example.com"; // <- ИЗМЕНИТЕ ЭТО!
-
-            // Музыкальная часть
-            function initAudio() {
-                if (audioContext) return;
-                try {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                } catch (e) {
-                    console.log('Web Audio API not supported');
-                }
-            }
-
+            // Функции для музыки
             function startMusic() {
-                if (!audioContext) initAudio();
-                if (!audioContext) return;
-
-                if (audioContext.state === 'suspended') {
-                    audioContext.resume().then(() => playTone()).catch(() => {});
-                } else if (audioContext.state === 'running') {
-                    playTone();
-                } else {
-                    initAudio();
-                    if (audioContext) {
-                        audioContext.resume().then(() => playTone()).catch(() => {});
-                    }
+                if (isPlaying) {
+                    stopMusic();
+                    return;
                 }
-            }
-
-            function playTone() {
-                if (isPlaying || !audioContext) return;
-
-                isPlaying = true;
-                record.classList.add('playing');
-                tonearm.classList.add('active');
-                musicStatus.textContent = '♫ Играет мелодия... ♫';
-                recordLabel.innerHTML = '🎵';
-
-                const now = audioContext.currentTime;
-                const gainNode = audioContext.createGain();
-                gainNode.gain.value = 0.2;
-                gainNode.connect(audioContext.destination);
-
-                const melody = [
-                    { note: 261.63, duration: 0.5 },
-                    { note: 329.63, duration: 0.5 },
-                    { note: 392.00, duration: 0.7 },
-                    { note: 523.25, duration: 0.9 },
-                    { note: 493.88, duration: 0.7 },
-                    { note: 440.00, duration: 0.7 },
-                    { note: 349.23, duration: 0.9 },
-                    { note: 261.63, duration: 1.3 },
-                ];
-
-                let startTime = now;
-                melody.forEach((m, i) => {
-                    try {
-                        const osc = audioContext.createOscillator();
-                        const noteGain = audioContext.createGain();
-                        
-                        osc.type = i % 3 === 0 ? 'sine' : 'triangle';
-                        osc.frequency.value = m.note;
-                        
-                        noteGain.gain.setValueAtTime(0, startTime);
-                        noteGain.gain.linearRampToValueAtTime(0.15, startTime + 0.05);
-                        noteGain.gain.linearRampToValueAtTime(0, startTime + m.duration - 0.1);
-                        
-                        osc.connect(noteGain);
-                        noteGain.connect(gainNode);
-                        
-                        osc.start(startTime);
-                        osc.stop(startTime + m.duration);
-                    } catch (e) {}
-                    
-                    startTime += m.duration * 0.7;
+                
+                // Создаём аудиоэлемент, если его нет
+                if (!audioElement) {
+                    audioElement = new Audio(MUSIC_FILE);
+                    audioElement.loop = true;
+                    audioElement.volume = 0.5;
+                }
+                
+                audioElement.play().then(() => {
+                    isPlaying = true;
+                    record.classList.add('playing');
+                    tonearm.classList.add('active');
+                    musicStatus.textContent = '♫ Играет ваша музыка ♫';
+                    recordLabel.innerHTML = '🎵';
+                }).catch(error => {
+                    console.log('Ошибка воспроизведения:', error);
+                    musicStatus.textContent = 'Нажми ещё раз (файл не найден?)';
                 });
-
-                setTimeout(() => {
-                    if (isPlaying) stopMusic();
-                }, 10000);
             }
 
             function stopMusic() {
                 isPlaying = false;
+                if (audioElement) {
+                    audioElement.pause();
+                    audioElement.currentTime = 0;
+                }
                 record.classList.remove('playing');
                 tonearm.classList.remove('active');
                 musicStatus.textContent = 'Нажми на пластинку ❤️';
                 recordLabel.innerHTML = '❤️';
             }
 
+            // Нажатие на пластинку
             recordContainer.addEventListener('click', function(e) {
                 e.preventDefault();
-                if (isPlaying) {
-                    stopMusic();
-                } else {
-                    startMusic();
-                }
+                startMusic();
                 
-                // Виброотклик
                 if (window.navigator && window.navigator.vibrate) {
                     window.navigator.vibrate(20);
                 }
             });
 
-            // Инициализация аудио при первом взаимодействии с документом
-            document.addEventListener('touchstart', function initOnTouch() {
-                if (!audioContext) initAudio();
-                document.removeEventListener('touchstart', initOnTouch);
-            }, { once: true });
-
-            document.addEventListener('click', function initOnClick() {
-                if (!audioContext) initAudio();
-            }, { once: true });
+            // Останавливаем музыку при уходе со страницы (не обязательно)
+            window.addEventListener('beforeunload', function() {
+                if (audioElement) {
+                    audioElement.pause();
+                }
+            });
         })();
     </script>
 </body>
