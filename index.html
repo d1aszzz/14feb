@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>С Днём Святого Валентина ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(145deg, #2a1b2f 0%, #3d2a3a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+            padding: 10px 0 20px;
+        }
+
+        /* Анимированные сердечки на фоне */
+        .heart-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .heart-bg::before,
+        .heart-bg::after,
+        .heart-bg span {
+            content: '❤️';
+            position: absolute;
+            font-size: clamp(16px, 4vw, 24px);
+            opacity: 0.15;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        .heart-bg::before {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .heart-bg::after {
+            top: 70%;
+            right: 8%;
+            font-size: clamp(24px, 6vw, 32px);
+            animation-delay: 2s;
+        }
+
+        .heart-bg span:nth-child(1) { top: 20%; left: 80%; animation-delay: 1s; }
+        .heart-bg span:nth-child(2) { top: 85%; left: 15%; font-size: clamp(20px, 5vw, 28px); animation-delay: 3s; }
+        .heart-bg span:nth-child(3) { top: 40%; right: 20%; animation-delay: 4s; }
+        .heart-bg span:nth-child(4) { top: 60%; left: 40%; font-size: clamp(18px, 4.5vw, 24px); animation-delay: 2.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .container {
+            max-width: 500px;
+            width: 92%;
+            margin: 10px auto;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(20px, 5vw, 35px);
+        }
+
+        h1 {
+            font-family: 'Brush Script MT', cursive;
+            color: #ffd7d7;
+            font-size: clamp(2.5rem, 10vw, 4rem);
+            text-shadow: 0 0 15px rgba(255, 120, 120, 0.7), 2px 4px 8px rgba(0,0,0,0.3);
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            animation: glow 3s infinite alternate;
+            text-align: center;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 15px #ff9a9a, 2px 4px 8px black; }
+            to { text-shadow: 0 0 30px #ff4d4d, 4px 6px 12px black; }
+        }
+
+        /* Стили для пластинки */
+        .record-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 5px 0;
+            width: 100%;
+        }
+
+        .record-container {
+            position: relative;
+            width: min(280px, 65vw);
+            height: min(280px, 65vw);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .record-container:active {
+            transform: scale(0.98);
+        }
+
+        .record-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(90px, 22vw);
+            height: min(90px, 22vw);
+            background: radial-gradient(circle, #f8d5d5 30%, #d88a8a 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 15;
+            box-shadow: 0 0 15px rgba(255, 200, 200, 0.8);
+            border: 2px solid #b35e5e;
+            font-size: min(2rem, 8vw);
+            color: #6b2d2d;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .record {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, #333, #111);
+            border-radius: 50%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7), 0 0 0 4px #d4af37, 0 0 0 7px #b8860b;
+            position: relative;
+            animation: spin 8s linear infinite;
+            animation-play-state: paused;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .record.playing {
+            animation-play-state: running;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7), 0 0 0 4px #ff6b6b, 0 0 0 7px #c94f4f;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .record::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 20%;
+            height: 20%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            filter: blur(5px);
+        }
+
+        .record::after {
+            content: '';
+            position: absolute;
+            top: 45%;
+            left: 45%;
+            width: 10%;
+            height: 10%;
+            background: #d4af37;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #ffd700;
+        }
+
+        .tonearm {
+            position: absolute;
+            top: 15px;
+            right: -20px;
+            width: min(70px, 16vw);
+            height: min(100px, 23vw);
+            transform-origin: top right;
+            transform: rotate(-15deg);
+            transition: transform 0.5s ease;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .tonearm.active {
+            transform: rotate(-5deg);
+        }
+
+        .tonearm-base {
+            width: min(18px, 4vw);
+            height: min(18px, 4vw);
+            background: #c0c0c0;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px #a0a0a0;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .tonearm-arm {
+            width: min(50px, 12vw);
+            height: min(6px, 1.5vw);
+            background: linear-gradient(45deg, #b0b0b0, #808080);
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            transform-origin: right center;
+            transform: rotate(10deg);
+            border-radius: 4px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .tonearm-head {
+            width: min(16px, 4vw);
+            height: min(16px, 4vw);
+            background: #606060;
+            border-radius: 50% 50% 0 50%;
+            position: absolute;
+            top: -3px;
+            left: -6px;
+        }
+
+        .music-status {
+            margin-top: 5px;
+            color: #ffcaca;
+            font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+            font-style: italic;
+            text-shadow: 0 2px 5px black;
+            min-height: 30px;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        /* Стили для фотоальбома */
+        .album-section {
+            width: 100%;
+            text-align: center;
+        }
+
+        .album-title {
+            font-size: clamp(2rem, 7vw, 2.5rem);
+            color: #ffe2e2;
+            margin-bottom: 15px;
+            font-family: 'Brush Script MT', cursive;
+            text-shadow: 0 2px 10px #ff6b6b;
+        }
+
+        .photo-album {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 15px 12px;
+            background: rgba(60, 40, 50, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 40px 40px 25px 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 200, 200, 0.3);
+            border: 1px solid rgba(255, 140, 140, 0.5);
+        }
+
+        /* Контейнер для 3D эффекта */
+        .photo-card {
+            background: transparent;
+            perspective: 1200px;
+            cursor: pointer;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            width: 100%;
+            margin-bottom: 5px;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* Внутренний контейнер для переворота */
+        .photo-card-inner {
+            position: relative;
+            width: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            border-radius: 18px;
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        .photo-card.flipped .photo-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* Лицевая и оборотная стороны */
+        .photo-front, .photo-back {
+            position: relative;
+            width: 100%;
+            backface-visibility: hidden;
+            border-radius: 18px;
+            background: #f5e6e6;
+            padding: 12px 12px 18px 12px;
+            box-shadow: 0 0 0 2px #ddaaaa, 0 0 0 4px #ffeaea;
+        }
+
+        .photo-front {
+            transform: rotateY(0deg);
+        }
+
+        .photo-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotateY(180deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffd0d0, #ffb6b6);
+            color: #4a2a2a;
+            font-size: clamp(1.3rem, 5vw, 1.8rem);
+            font-family: 'Brush Script MT', cursive;
+            text-align: center;
+            padding: 15px;
+            min-height: 100%;
+            height: 100%;
+        }
+
+        .photo-back p {
+            word-break: break-word;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+            line-height: 1.4;
+        }
+
+        /* Убираем наклоны на мобильных для лучшего восприятия */
+        .photo-card:nth-child(odd) .photo-front,
+        .photo-card:nth-child(odd) .photo-back {
+            transform: rotate(0deg);
+        }
+
+        .photo-card:nth-child(even) .photo-front,
+        .photo-card:nth-child(even) .photo-back {
+            transform: rotate(0deg);
+        }
+
+        /* Добавляем легкий наклон только для планшетов и выше */
+        @media (min-width: 768px) {
+            .photo-card:nth-child(odd) .photo-front,
+            .photo-card:nth-child(odd) .photo-back {
+                transform: rotate(-0.8deg);
+            }
+
+            .photo-card:nth-child(even) .photo-front,
+            .photo-card:nth-child(even) .photo-back {
+                transform: rotate(1deg);
+            }
+        }
+
+        .photo-frame {
+            width: 100%;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+            border: 2px solid white;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+            display: block;
+        }
+
+        .photo-card:active .photo-frame img {
+            transform: scale(1.05);
+        }
+
+        .photo-caption {
+            margin-top: 10px;
+            font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+            color: #5a3a3a;
+            font-weight: bold;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 5px 12px;
+            border-radius: 30px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            border: 1px solid #ffb6b6;
+        }
+
+        .emoji-photo {
+            font-size: clamp(3.5rem, 15vw, 5rem);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            background: linear-gradient(45deg, #ffc0cb, #ffb6c1);
+        }
+
+        /* Кнопка перехода */
+        .redirect-button {
+            margin: 10px 0 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .redirect-btn {
+            display: inline-block;
+            padding: 14px 25px;
+            background: linear-gradient(45deg, #ff6b6b, #ff4d4d);
+            color: white;
+            font-size: clamp(1.3rem, 5.5vw, 1.8rem);
+            font-family: 'Brush Script MT', cursive;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 8px 20px rgba(255, 75, 75, 0.5), 0 0 0 2px #ffd7d7, 0 0 0 4px #ff9a9a;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+            width: fit-content;
+            max-width: 90%;
+            word-break: break-word;
+            line-height: 1.3;
+        }
+
+        .redirect-btn:active {
+            transform: scale(0.95);
+            background: linear-gradient(45deg, #ff4d4d, #ff1a1a);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        footer {
+            margin-top: 10px;
+            color: #ffc9c9;
+            font-size: clamp(0.8rem, 3vw, 1rem);
+            text-shadow: 0 2px 5px black;
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        /* Адаптация для очень маленьких экранов */
+        @media (max-width: 380px) {
+            .container {
+                width: 95%;
+                gap: 15px;
+            }
+            
+            .photo-album {
+                padding: 12px 10px;
+                gap: 15px;
+            }
+            
+            .photo-front, .photo-back {
+                padding: 8px 8px 14px 8px;
+            }
+            
+            .redirect-btn {
+                padding: 12px 20px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-bg">
+        <span>❤️</span>
+        <span>❤️</span>
+        <span>❤️</span>
+        <span>❤️</span>
+    </div>
+
+    <div class="container">
+        <h1>С Днём всех влюблённых!</h1>
+
+        <!-- Виниловая пластинка с музыкой -->
+        <div class="record-section">
+            <div class="record-container" id="recordContainer">
+                <div class="record-label" id="recordLabel">❤️</div>
+                <div class="record" id="record"></div>
+                <div class="tonearm" id="tonearm">
+                    <div class="tonearm-base"></div>
+                    <div class="tonearm-arm">
+                        <div class="tonearm-head"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="music-status" id="musicStatus">Нажми на пластинку, чтобы включить музыку</div>
+
+        <!-- Фотоальбом -->
+        <div class="album-section">
+            <h2 class="album-title">Наш фотоальбом ❤️</h2>
+            <div class="photo-album" id="photoAlbum"></div>
+        </div>
+
+        <!-- Кнопка перехода -->
+        <div class="redirect-button">
+            <a href="#" class="redirect-btn" id="redirectLink" target="_blank">💝 нажми здесь для перехода 💝</a>
+        </div>
+
+        <footer>14 февраля — день любви</footer>
+    </div>
+
+    <script>
+        (function() {
+            // Аудио контекст
+            let audioContext;
+            let isPlaying = false;
+
+            // Элементы пластинки
+            const record = document.getElementById('record');
+            const tonearm = document.getElementById('tonearm');
+            const recordContainer = document.getElementById('recordContainer');
+            const musicStatus = document.getElementById('musicStatus');
+            const recordLabel = document.getElementById('recordLabel');
+
+            // Данные для фотоальбома - ИЗМЕНИТЕ ТЕКСТ ЗДЕСЬ!
+            const photos = [
+                { 
+                    emoji: '🥰', 
+                    caption: 'Наша встреча', 
+                    bg: '#ffdbdb',
+                    message: 'Самый лучший день в моей жизни ❤️' 
+                },
+                { 
+                    emoji: '😘', 
+                    caption: 'Первый поцелуй', 
+                    bg: '#ffd0d0',
+                    message: 'Твои губы как лепестки роз' 
+                },
+                { 
+                    emoji: '❤️', 
+                    caption: 'Ты и я', 
+                    bg: '#ffc4c4',
+                    message: 'Мы созданы друг для друга' 
+                },
+                { 
+                    emoji: '🌹', 
+                    caption: 'Цветы для тебя', 
+                    bg: '#ffb8b8',
+                    message: 'Ты прекраснее любого цветка' 
+                },
+                { 
+                    emoji: '🍰', 
+                    caption: 'Сладкий вечер', 
+                    bg: '#ffadad',
+                    message: 'С тобой каждый миг сладок' 
+                },
+                { 
+                    emoji: '🎁', 
+                    caption: 'Сюрприз', 
+                    bg: '#ffa2a2',
+                    message: 'Ты — лучший подарок судьбы' 
+                },
+                { 
+                    emoji: '☕', 
+                    caption: 'Утро вдвоём', 
+                    bg: '#ff9696',
+                    message: 'Просыпаться с тобой — счастье' 
+                },
+                { 
+                    emoji: '💑', 
+                    caption: 'Навсегда', 
+                    bg: '#ff8b8b',
+                    message: 'Я люблю тебя бесконечно ✨' 
+                }
+            ];
+
+            // Заполняем фотоальбом
+            const albumContainer = document.getElementById('photoAlbum');
+            photos.forEach((photo, index) => {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                card.setAttribute('data-index', index);
+                
+                card.innerHTML = `
+                    <div class="photo-card-inner">
+                        <div class="photo-front">
+                            <div class="photo-frame">
+                                <div class="emoji-photo" style="background: ${photo.bg};">${photo.emoji}</div>
+                            </div>
+                            <div class="photo-caption">${photo.caption}</div>
+                        </div>
+                        <div class="photo-back">
+                            <p>${photo.message}</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Обработчик клика для переворота
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.classList.toggle('flipped');
+                    
+                    // Легкая виброотдача на мобильных (если поддерживается)
+                    if (window.navigator && window.navigator.vibrate) {
+                        window.navigator.vibrate(15);
+                    }
+                });
+                
+                albumContainer.appendChild(card);
+            });
+
+            // Кнопка перехода - ВСТАВЬТЕ СВОЮ ССЫЛКУ ЗДЕСЬ
+            const redirectLink = document.getElementById('redirectLink');
+            // ЗАМЕНИТЕ "#" НА НУЖНЫЙ URL, НАПРИМЕР:
+            redirectLink.href = "https://www.example.com"; // <- ИЗМЕНИТЕ ЭТО!
+
+            // Музыкальная часть
+            function initAudio() {
+                if (audioContext) return;
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.log('Web Audio API not supported');
+                }
+            }
+
+            function startMusic() {
+                if (!audioContext) initAudio();
+                if (!audioContext) return;
+
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume().then(() => playTone()).catch(() => {});
+                } else if (audioContext.state === 'running') {
+                    playTone();
+                } else {
+                    initAudio();
+                    if (audioContext) {
+                        audioContext.resume().then(() => playTone()).catch(() => {});
+                    }
+                }
+            }
+
+            function playTone() {
+                if (isPlaying || !audioContext) return;
+
+                isPlaying = true;
+                record.classList.add('playing');
+                tonearm.classList.add('active');
+                musicStatus.textContent = '♫ Играет мелодия... ♫';
+                recordLabel.innerHTML = '🎵';
+
+                const now = audioContext.currentTime;
+                const gainNode = audioContext.createGain();
+                gainNode.gain.value = 0.2;
+                gainNode.connect(audioContext.destination);
+
+                const melody = [
+                    { note: 261.63, duration: 0.5 },
+                    { note: 329.63, duration: 0.5 },
+                    { note: 392.00, duration: 0.7 },
+                    { note: 523.25, duration: 0.9 },
+                    { note: 493.88, duration: 0.7 },
+                    { note: 440.00, duration: 0.7 },
+                    { note: 349.23, duration: 0.9 },
+                    { note: 261.63, duration: 1.3 },
+                ];
+
+                let startTime = now;
+                melody.forEach((m, i) => {
+                    try {
+                        const osc = audioContext.createOscillator();
+                        const noteGain = audioContext.createGain();
+                        
+                        osc.type = i % 3 === 0 ? 'sine' : 'triangle';
+                        osc.frequency.value = m.note;
+                        
+                        noteGain.gain.setValueAtTime(0, startTime);
+                        noteGain.gain.linearRampToValueAtTime(0.15, startTime + 0.05);
+                        noteGain.gain.linearRampToValueAtTime(0, startTime + m.duration - 0.1);
+                        
+                        osc.connect(noteGain);
+                        noteGain.connect(gainNode);
+                        
+                        osc.start(startTime);
+                        osc.stop(startTime + m.duration);
+                    } catch (e) {}
+                    
+                    startTime += m.duration * 0.7;
+                });
+
+                setTimeout(() => {
+                    if (isPlaying) stopMusic();
+                }, 10000);
+            }
+
+            function stopMusic() {
+                isPlaying = false;
+                record.classList.remove('playing');
+                tonearm.classList.remove('active');
+                musicStatus.textContent = 'Нажми на пластинку ❤️';
+                recordLabel.innerHTML = '❤️';
+            }
+
+            recordContainer.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (isPlaying) {
+                    stopMusic();
+                } else {
+                    startMusic();
+                }
+                
+                // Виброотклик
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(20);
+                }
+            });
+
+            // Инициализация аудио при первом взаимодействии с документом
+            document.addEventListener('touchstart', function initOnTouch() {
+                if (!audioContext) initAudio();
+                document.removeEventListener('touchstart', initOnTouch);
+            }, { once: true });
+
+            document.addEventListener('click', function initOnClick() {
+                if (!audioContext) initAudio();
+            }, { once: true });
+        })();
+    </script>
+</body>
+</html>
